@@ -26,12 +26,20 @@ class SNAKE:
             block_rect = pygame.Rect(block.x*cell_size,block.y*cell_size,cell_size,cell_size)
             pygame.draw.rect(screen,self.color,block_rect)
             
+    def move_snake(self):
+        body_copy = self.body[:-1]
+        body_copy.insert(0,body_copy[0]+self.direction)
+        self.body = body_copy
+            
             
             
 class MAIN:
     def __init__(self):
         self.snake = SNAKE()
         self.fruit = FRUIT()
+        
+    def update(self):
+        self.snake.move_snake()
         
     def draw_elements(self):
         self.snake.draw_snake()
@@ -51,6 +59,9 @@ screen = pygame.display.set_mode((screen_size,screen_size))
 screen_title = pygame.display.set_caption("Snake")
 clock = pygame.time.Clock()
 
+SCREEN_UPDATE = pygame.USEREVENT
+pygame.time.set_timer(SCREEN_UPDATE,150)
+
 main_game = MAIN()
 
 
@@ -59,6 +70,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+            
+        if event.type == SCREEN_UPDATE:
+            main_game.update()
             
     screen.fill(screen_color)
     
