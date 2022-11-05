@@ -23,7 +23,7 @@ class SNAKE:
         self.enlarge = False
         self.color = (192,22,14)
         self.body = [Vector2(7,10),Vector2(6,10),Vector2(5,10)]
-        self.direction = Vector2(1,0)
+        self.direction = Vector2(0,0)
         
     def draw_snake(self):
         for block in self.body:
@@ -31,15 +31,16 @@ class SNAKE:
             pygame.draw.rect(screen,self.color,block_rect)
             
     def move_snake(self):
-        if self.enlarge:
-            body_copy = self.body
-            body_copy.insert(0,body_copy[0]+self.direction)
-            self.body = body_copy
-            self.enlarge = False
-        else:
-            body_copy = self.body[:-1]
-            body_copy.insert(0,body_copy[0]+self.direction)
-            self.body = body_copy
+        if self.direction != Vector2(0,0):
+            if self.enlarge:
+                body_copy = self.body
+                body_copy.insert(0,body_copy[0]+self.direction)
+                self.body = body_copy
+                self.enlarge = False
+            else:
+                body_copy = self.body[:-1]
+                body_copy.insert(0,body_copy[0]+self.direction)
+                self.body = body_copy
         
     def add_block(self):
         self.enlarge = True
@@ -54,6 +55,7 @@ class MAIN:
     def update(self):
         self.snake.move_snake()
         self.check_collision()
+        self.check_fail()
         
     def draw_elements(self):
         self.snake.draw_snake()
@@ -63,6 +65,27 @@ class MAIN:
         if self.snake.body[0] == self.fruit.pos:
             self.fruit.randomize()
             self.snake.add_block()
+            
+    def check_fail(self):
+        if self.snake.body[0] in self.snake.body[1:]:
+            self.game_over()
+        
+        for block in self.snake.body:
+            if block.x == 20:
+                self.game_over()
+                
+            if block.x == -1:
+                self.game_over()
+                
+            if block.y == 20:
+                self.game_over()
+                
+            if block.y == -1:
+                self.game_over()
+        
+    def game_over(self):
+        self.snake.body = [Vector2(7,10),Vector2(6,10),Vector2(5,10)]
+        self.snake.direction = Vector2(0,0)
 
 
 
