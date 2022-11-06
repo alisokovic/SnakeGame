@@ -4,7 +4,7 @@ from pygame.math import Vector2
 
 class FRUIT:
     def __init__(self):
-        self.color = (12,24,186)
+        self.color = "#ed40ea"
         self.randomize()
         
     def draw_fruit(self):
@@ -21,7 +21,7 @@ class FRUIT:
 class SNAKE:
     def __init__(self):
         self.enlarge = False
-        self.color = (192,22,14)
+        self.color = "#f55718"
         self.body = [Vector2(7,10),Vector2(6,10),Vector2(5,10)]
         self.direction = Vector2(0,0)
         
@@ -90,7 +90,7 @@ class MAIN:
         self.snake.direction = Vector2(0,0)
         
     def draw_grass(self):
-        grass_color = (1,172,3)
+        grass_color = "#666bd9"
         
         for col in range(cell_number):
             if col % 2 == 0:
@@ -107,7 +107,7 @@ class MAIN:
     def show_score(self):
         score = int(len(self.snake.body)-3)
         score_text = f"SCORE: {score}"
-        score_surface = game_font.render(score_text,True,(0,0,0))
+        score_surface = game_font.render(score_text,True,"#36c2cf")
         score_rect = score_surface.get_rect(center=(100,30))
         screen.blit(score_surface,score_rect)
         
@@ -120,7 +120,7 @@ pygame.init()
 cell_size = 40
 cell_number = 20
 screen_size = int(cell_number*cell_size)
-screen_color = (21,192,23)
+screen_color = "#777dfc"
 
 screen = pygame.display.set_mode((screen_size,screen_size))
 screen_title = pygame.display.set_caption("Snake")
