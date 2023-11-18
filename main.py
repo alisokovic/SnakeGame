@@ -67,6 +67,7 @@ class MAIN:
         self.draw_grass()
         self.snake.draw_snake()
         self.fruit.draw_fruit()
+        self.show_score()
 
 
     def update(self):
@@ -112,6 +113,14 @@ class MAIN:
                     if row % 2 != 0:
                         grass_rect = pygame.Rect(col * cell_size, row * cell_size , cell_size, cell_size)
                         pygame.draw.rect(screen,grass_color,grass_rect)
+                        
+                        
+    def show_score(self):
+        score = len(self.snake.body) - 3
+        score_text = f"SCORE: {score}"
+        score_surface = game_font.render(score_text, True , (0,0,0))
+        score_rect = score_surface.get_rect(center = (150 , 50))
+        screen.blit(score_surface,score_rect)
         
             
             
@@ -127,6 +136,7 @@ screen_color = (35, 170, 72)
 
 screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
+game_font = pygame.font.Font(None, 72)
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 120)
