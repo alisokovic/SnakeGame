@@ -61,11 +61,29 @@ class MAIN:
     def update(self):
         self.snake.move_snake()
         self.check_collision()
+        self.check_fail()
         
     def check_collision(self):
         if self.snake.body[0] == self.fruit.pos:
             self.fruit.randomize()
             self.snake.add_block()
+            
+    def check_fail(self):
+        if self.snake.body[0] in self.snake.body[1:]:
+            self.game_over()
+            
+        if self.snake.body[0].x == -1 or self.snake.body[0].x == 30:
+            self.game_over()
+            
+        if self.snake.body[0].y == -1 or self.snake.body[0].y == 15:
+            self.game_over()
+            
+    def game_over(self):
+        self.snake.body = [Vector2(10, 9), Vector2(9, 9), Vector2(8, 9)]
+        self.snake.direction = Vector2(0,0)
+        self.fruit.randomize()
+            
+            
 
 
 pygame.init()
