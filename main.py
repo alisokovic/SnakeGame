@@ -20,7 +20,7 @@ class SNAKE:
     def __init__(self):
         self.color = (155, 35, 57)
         self.body = [Vector2(10, 9), Vector2(9, 9), Vector2(8, 9)]
-        self.direction = Vector2(1, 0)
+        self.direction = Vector2(0, 0)
 
     def draw_snake(self):
         for block in self.body:
@@ -28,9 +28,10 @@ class SNAKE:
             pygame.draw.rect(screen, self.color, block_rect)
 
     def move_snake(self):
-        body_copy = self.body[:-1]
-        body_copy.insert(0, body_copy[0] + self.direction)
-        self.body = body_copy
+        if self.direction != Vector2(0,0):
+            body_copy = self.body[:-1]
+            body_copy.insert(0, body_copy[0] + self.direction)
+            self.body = body_copy
 
 
 class MAIN:
@@ -71,6 +72,23 @@ while True:
 
         if event.type == SCREEN_UPDATE:
             main_game.update()
+            
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                if main_game.snake.direction.y != 1:
+                    main_game.snake.direction = Vector2(0,-1)
+                
+            if event.key == pygame.K_DOWN:
+                if main_game.snake.direction.y != -1:
+                    main_game.snake.direction = Vector2(0,1)
+                
+            if event.key == pygame.K_LEFT:
+                if main_game.snake.direction.x != 1:
+                    main_game.snake.direction = Vector2(-1,0)
+                
+            if event.key == pygame.K_RIGHT:
+                if main_game.snake.direction.x != -1:
+                    main_game.snake.direction = Vector2(1,0)
 
     screen.fill(screen_color)
 
