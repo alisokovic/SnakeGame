@@ -134,13 +134,13 @@ class MAIN:
 
     def show_time_and_score(self):
         time_text = f"TIME: {self.current_time}"
-        time_surface = game_font.render(time_text, True, (0, 0, 0))
-        score_rect = time_surface.get_rect(topright=(screen_size[0] - 30, 30))
+        time_surface = time_font.render(time_text, True, (74, 35, 90))
+        score_rect = time_surface.get_rect(topleft=(25,120))
         screen.blit(time_surface, score_rect)
 
         score_text = f"SCORE: {self.score}"
-        score_surface = game_font.render(score_text, True, (0, 0, 0))
-        score_rect = score_surface.get_rect(topleft=(30, 30))
+        score_surface = score_font.render(score_text, True, (74, 35, 90))
+        score_rect = score_surface.get_rect(topleft=(25, -15))
         screen.blit(score_surface, score_rect)
 
     def set_game_level(self):
@@ -171,7 +171,8 @@ screen_color = (35, 170, 72)
 
 screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
-game_font = pygame.font.Font(None, 72)
+score_font = pygame.font.Font("./data/fonts/burnstown dam.otf",128)
+time_font = pygame.font.Font("./data/fonts/vademecum.otf",48)
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 150)
