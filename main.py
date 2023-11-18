@@ -25,6 +25,19 @@ class SNAKE:
         for block in self.body:
             block_rect = pygame.Rect((block.x * cell_size), (block.y * cell_size), cell_size, cell_size)
             pygame.draw.rect(screen, self.color, block_rect)
+            
+            
+            
+class MAIN:
+    def __init__(self):
+        self.snake = SNAKE()
+        self.fruit = FRUIT()
+        
+    def draw_elements(self):
+        self.snake.draw_snake()
+        self.fruit.draw_fruit()
+        
+
 
 
 pygame.init()
@@ -39,8 +52,7 @@ screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
 
 
-fruit = FRUIT()
-snake = SNAKE()
+main_game = MAIN()
 
 
 while True:
@@ -51,8 +63,7 @@ while True:
 
     screen.fill(screen_color)
 
-    snake.draw_snake()
-    fruit.draw_fruit()
+    main_game.draw_elements()
 
     pygame.display.update()
     clock.tick(60)
