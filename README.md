@@ -1,2 +1,2 @@
 # SnakeGame
-snake game from "Clear Code" youtube channel
+snake game from the "Clear Code" youtube channel. This repo is created for learning github.
