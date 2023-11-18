@@ -5,16 +5,19 @@ from pygame.math import Vector2
 
 
 class FRUIT:
+    
     def __init__(self):
         self.color = (42, 77, 182)
         self.x = random.randint(0, cell_col_number - 1)
         self.y = random.randint(0, cell_row_number - 1)
         self.pos = Vector2(self.x, self.y)
 
+    
     def draw_fruit(self):
         fruit_rect = pygame.Rect(self.x * cell_size, self.y * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, self.color, fruit_rect)
         
+    
     def randomize(self):
         self.x = random.randint(0, cell_col_number - 1)
         self.y = random.randint(0, cell_row_number - 1)
@@ -22,17 +25,20 @@ class FRUIT:
 
 
 class SNAKE:
+    
     def __init__(self):
         self.enlarge = False
         self.color = (155, 35, 57)
         self.body = [Vector2(10, 9), Vector2(9, 9), Vector2(8, 9)]
         self.direction = Vector2(0, 0)
 
+    
     def draw_snake(self):
         for block in self.body:
             block_rect = pygame.Rect((block.x * cell_size), (block.y * cell_size), cell_size, cell_size)
             pygame.draw.rect(screen, self.color, block_rect)
 
+    
     def move_snake(self):
         if self.direction != Vector2(0,0):
             if self.enlarge:
@@ -45,28 +51,35 @@ class SNAKE:
                 body_copy.insert(0, body_copy[0] + self.direction)
                 self.body = body_copy
             
+    
     def add_block(self):
         self.enlarge = True
 
 
 class MAIN:
+    
     def __init__(self):
         self.snake = SNAKE()
         self.fruit = FRUIT()
 
+    
     def draw_elements(self):
+        self.draw_grass()
         self.snake.draw_snake()
         self.fruit.draw_fruit()
+
 
     def update(self):
         self.snake.move_snake()
         self.check_collision()
         self.check_fail()
         
+ 
     def check_collision(self):
         if self.snake.body[0] == self.fruit.pos:
             self.fruit.randomize()
             self.snake.add_block()
+ 
             
     def check_fail(self):
         if self.snake.body[0] in self.snake.body[1:]:
@@ -77,11 +90,29 @@ class MAIN:
             
         if self.snake.body[0].y == -1 or self.snake.body[0].y == 15:
             self.game_over()
+       
             
     def game_over(self):
         self.snake.body = [Vector2(10, 9), Vector2(9, 9), Vector2(8, 9)]
         self.snake.direction = Vector2(0,0)
         self.fruit.randomize()
+        
+        
+    def draw_grass(self):
+        grass_color = (15, 150, 52)
+        
+        for col in range(cell_col_number):
+            if col % 2 == 0:
+                for row in range(cell_row_number):
+                    if row % 2 == 0:
+                        grass_rect = pygame.Rect(col * cell_size, row * cell_size , cell_size, cell_size)
+                        pygame.draw.rect(screen,grass_color,grass_rect)
+            else:
+                for row in range(cell_row_number):
+                    if row % 2 != 0:
+                        grass_rect = pygame.Rect(col * cell_size, row * cell_size , cell_size, cell_size)
+                        pygame.draw.rect(screen,grass_color,grass_rect)
+        
             
             
 
