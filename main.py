@@ -235,7 +235,7 @@ while True:
                     main_game.snake.direction = Vector2(0, 1)
 
             if event.key == pygame.K_LEFT:
-                if main_game.snake.direction.x != 1:
+                if main_game.snake.direction.x != 1 and main_game.snake.isMoving:
                     main_game.snake.direction = Vector2(-1, 0)
 
             if event.key == pygame.K_RIGHT:
