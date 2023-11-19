@@ -116,10 +116,10 @@ class MAIN:
         if self.snake.body[0] in self.snake.body[1:]:
             self.game_over()
 
-        if self.snake.body[0].x == -1 or self.snake.body[0].x == 30:
+        if self.snake.body[0].x == -1 or self.snake.body[0].x == cell_col_number:
             self.game_over()
 
-        if self.snake.body[0].y == -1 or self.snake.body[0].y == 15:
+        if self.snake.body[0].y == -1 or self.snake.body[0].y == cell_row_number:
             self.game_over()
 
     def game_over(self):
@@ -199,8 +199,8 @@ class MAIN:
 pygame.init()
 
 cell_initial_size = 40
-cell_col_number = 30
-cell_row_number = 15
+cell_col_number = 32
+cell_row_number = 18
 screen_inital_size = (int(cell_col_number * cell_initial_size), int(cell_row_number * cell_initial_size))
 screen_color = (35, 170, 72)
 
