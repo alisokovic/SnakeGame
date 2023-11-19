@@ -64,10 +64,12 @@ class SNAKE:
 
 class MAIN:
     def __init__(self):
-        self.resize()
+        self.width = screen.get_width() / cell_col_number
+        self.height = screen.get_height() / cell_row_number
         self.snake = SNAKE(self.width, self.height)
         self.fruit = FRUIT(self.width, self.height)
         self.restore_booleans()
+        self.load_fonts()
         self.score = 0
         self.start_time = 0
         self.current_time = 0
@@ -84,10 +86,12 @@ class MAIN:
         self.set_game_level()
         
     def resize(self):
-        self.width = int(screen.get_width() // cell_col_number)
-        self.height = int(screen.get_height() // cell_row_number)
-        self.snake = SNAKE(self.width, self.height)
-        self.fruit = FRUIT(self.width, self.height)
+        self.width = screen.get_width() / cell_col_number
+        self.height = screen.get_height() / cell_row_number
+        self.snake.width = self.width
+        self.snake.height = self.height
+        self.fruit.width = self.width
+        self.fruit.height = self.height
         self.load_fonts()
 
     def draw_elements(self):
@@ -169,8 +173,8 @@ class MAIN:
         screen.blit(score_surface, score_rect)
         
     def load_fonts(self):
-        time_size = int(((self.width + self.height) // 2) * 1.25)
-        score_size = self.width + self.height
+        time_size = int(((self.width + self.height) / 2) * 1.25)
+        score_size = int(self.width + self.height)
         self.time_font = pygame.font.Font("./data/fonts/vademecum.otf" , time_size)
         self.score_font = pygame.font.Font("./data/fonts/burnstown dam.otf" , score_size)
 
@@ -194,7 +198,7 @@ class MAIN:
 
 pygame.init()
 
-cell_initial_size = 60
+cell_initial_size = 40
 cell_col_number = 30
 cell_row_number = 15
 screen_inital_size = (int(cell_col_number * cell_initial_size), int(cell_row_number * cell_initial_size))
