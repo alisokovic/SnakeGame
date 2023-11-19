@@ -6,14 +6,18 @@ from pygame.math import Vector2
 
 
 class FRUIT:
-    def __init__(self):
+    def __init__(self, width , height):
         self.color = (42, 77, 182)
         self.x = random.randint(0, cell_col_number - 1)
         self.y = random.randint(0, cell_row_number - 1)
         self.pos = Vector2(self.x, self.y)
+        self.width = width
+        self.height = height
 
     def draw_fruit(self):
-        fruit_rect = pygame.Rect(self.x * cell_size, self.y * cell_size, cell_size, cell_size)
+        fruit_rect = pygame.Rect(self.x * self.width,
+                                 self.y * self.height,
+                                 self.width, self.height)
         pygame.draw.rect(screen, self.color, fruit_rect)
 
     def randomize(self):
@@ -23,7 +27,9 @@ class FRUIT:
 
 
 class SNAKE:
-    def __init__(self):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
         self.isMoving = False
         self.enlarge = False
         self.color = (155, 35, 57)
@@ -32,7 +38,9 @@ class SNAKE:
 
     def draw_snake(self):
         for block in self.body:
-            block_rect = pygame.Rect((block.x * cell_size), (block.y * cell_size), cell_size, cell_size)
+            block_rect = pygame.Rect(block.x * self.width,
+                                     block.y * self.height,
+                                     self.width, self.height)
             pygame.draw.rect(screen, self.color, block_rect)
 
     def move_snake(self):
@@ -56,8 +64,9 @@ class SNAKE:
 
 class MAIN:
     def __init__(self):
-        self.snake = SNAKE()
-        self.fruit = FRUIT()
+        self.resize()
+        self.snake = SNAKE(self.width, self.height)
+        self.fruit = FRUIT(self.width, self.height)
         self.restore_booleans()
         self.score = 0
         self.start_time = 0
@@ -73,19 +82,26 @@ class MAIN:
         self.draw_elements()
         self.timer()
         self.set_game_level()
-
-    def restore_booleans(self):
-        self.new_session = True
-        self.lvl1_bool = True
-        self.lvl2_bool = True
-        self.lvl3_bool = True
-        self.lvl4_bool = True
+        
+    def resize(self):
+        self.width = int(screen.get_width() // cell_col_number)
+        self.height = int(screen.get_height() // cell_row_number)
+        self.snake = SNAKE(self.width, self.height)
+        self.fruit = FRUIT(self.width, self.height)
+        self.load_fonts()
 
     def draw_elements(self):
         self.draw_grass()
         self.snake.draw_snake()
         self.fruit.draw_fruit()
         self.show_time_and_score()
+        
+    def restore_booleans(self):
+        self.new_session = True
+        self.lvl1_bool = True
+        self.lvl2_bool = True
+        self.lvl3_bool = True
+        self.lvl4_bool = True
 
     def check_collision(self):
         if self.snake.body[0] == self.fruit.pos:
@@ -115,12 +131,18 @@ class MAIN:
             if col % 2 == 0:
                 for row in range(cell_row_number):
                     if row % 2 == 0:
-                        grass_rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                        grass_rect = pygame.Rect(
+                            col * self.width,
+                            row * self.height,
+                            self.width, self.height)
                         pygame.draw.rect(screen, grass_color, grass_rect)
             else:
                 for row in range(cell_row_number):
                     if row % 2 != 0:
-                        grass_rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
+                        grass_rect = pygame.Rect(
+                            col * self.width,
+                            row * self.height,
+                            self.width, self.height)
                         pygame.draw.rect(screen, grass_color, grass_rect)
 
     def timer(self):
@@ -134,14 +156,23 @@ class MAIN:
 
     def show_time_and_score(self):
         time_text = f"TIME: {self.current_time}"
-        time_surface = time_font.render(time_text, True, (74, 35, 90))
-        score_rect = time_surface.get_rect(topleft=(25,120))
-        screen.blit(time_surface, score_rect)
+        time_surface = self.time_font.render(time_text, True, (74, 35, 90))
+        time_x = int(self.width // 2.4)
+        time_y = int(self.height * 2)
+        time_rect = time_surface.get_rect(topleft=(time_x,time_y))
+        screen.blit(time_surface, time_rect)
 
         score_text = f"SCORE: {self.score}"
-        score_surface = score_font.render(score_text, True, (74, 35, 90))
-        score_rect = score_surface.get_rect(topleft=(25, -15))
+        score_surface = self.score_font.render(score_text, True, (74, 35, 90))
+        score_y = int(self.height // 4)
+        score_rect = score_surface.get_rect(topleft=(time_x,-score_y))
         screen.blit(score_surface, score_rect)
+        
+    def load_fonts(self):
+        time_size = int(((self.width + self.height) // 2) * 1.25)
+        score_size = self.width + self.height
+        self.time_font = pygame.font.Font("./data/fonts/vademecum.otf" , time_size)
+        self.score_font = pygame.font.Font("./data/fonts/burnstown dam.otf" , score_size)
 
     def set_game_level(self):
         if self.lvl1_bool and (self.current_time >= 15):
@@ -163,16 +194,14 @@ class MAIN:
 
 pygame.init()
 
-cell_size = 60
+cell_initial_size = 60
 cell_col_number = 30
 cell_row_number = 15
-screen_size = (int(cell_col_number * cell_size), int(cell_row_number * cell_size))
+screen_inital_size = (int(cell_col_number * cell_initial_size), int(cell_row_number * cell_initial_size))
 screen_color = (35, 170, 72)
 
-screen = pygame.display.set_mode(screen_size)
+screen = pygame.display.set_mode(screen_inital_size, pygame.RESIZABLE)
 clock = pygame.time.Clock()
-score_font = pygame.font.Font("./data/fonts/burnstown dam.otf",128)
-time_font = pygame.font.Font("./data/fonts/vademecum.otf",48)
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 150)
@@ -185,6 +214,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+            
+        if event.type == pygame.VIDEORESIZE:
+            main_game.resize()
 
         if event.type == SCREEN_UPDATE:
             main_game.update()
